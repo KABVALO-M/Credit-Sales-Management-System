@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs', { title: 'Receivables' }) %>
+<body class="h-screen overflow-hidden bg-gray-100">
+    <!-- Include Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Include Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Flash Messages -->
+    <%- include('../partials/flashMessages.ejs') %>
+
+    <!-- Main Content -->
+    <div class="ml-64 mt-20 p-6 w-[calc(100%-16rem)] h-screen overflow-auto">
+        <h1 class="text-2xl font-bold mb-5">Monthly Receivables</h1>
+
+        <!-- Receivables Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Customer Name</th>
+                        <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Product Name</th>
+                        <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Quantity</th>
+                        <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Unit Price (MWK)</th>
+                        <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Total Price (MWK)</th>
+                        <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Monthly Installment (MWK)</th>
+                        <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Total Paid (MWK)</th>
+                        <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Balance Remaining (MWK)</th>
+                        <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Payable Amount (MWK)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let totalPayable = 0; %> <!-- Initialize total sum variable -->
+                    <% receivables.forEach(receivable => { %>
+                        <tr>
+                            <td class="py-4 px-4 border-b border-gray-300"><%= receivable.first_name %> <%= receivable.last_name %></td>
+                            <td class="py-4 px-4 border-b border-gray-300"><%= receivable.product_name %></td>
+                            <td class="py-4 px-4 border-b border-gray-300"><%= receivable.quantity %></td>
+                            <td class="py-4 px-4 border-b border-gray-300"><%= formatCurrency(receivable.unit_price) %></td>
+                            <td class="py-4 px-4 border-b border-gray-300"><%= formatCurrency(receivable.total_price) %></td>
+                            <td class="py-4 px-4 border-b border-gray-300"><%= formatCurrency(receivable.monthly_installment) %></td>
+                            <td class="py-4 px-4 border-b border-gray-300"><%= formatCurrency(receivable.total_paid) %></td>
+                            <td class="py-4 px-4 border-b border-gray-300"><%= formatCurrency(receivable.balance_remaining) %></td>
+                            <td class="py-4 px-4 border-b border-gray-300"><%= formatCurrency(receivable.payable_amount) %></td>
+                        </tr>
+                        <% totalPayable += parseFloat(receivable.payable_amount) || 0; %> <!-- Ensure adding number -->
+                    <% }); %>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8" class="py-4 px-4 border-t-2 border-gray-300 text-right font-bold text-gray-600">Monthly Total Payable Amount:</td>
+                        <td class="py-4 px-4 border-t-2 border-gray-300 font-bold text-gray-600">MWK<%= formatCurrency(totalPayable) %></td>
+                    </tr>
+                </tfoot>
+                
+            </table>
+        </div>
+    </div>
+
+    <script src="/js/flashMessages.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs', { title: 'Reports' }) %>
+<body class="h-screen overflow-hidden bg-gray-100">
+    <!-- Include Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Include Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Flash Messages -->
+    <%- include('../partials/flashMessages.ejs') %>
+
+    <!-- Main Content -->
+    <div class="ml-64 mt-20 p-6 w-[calc(100%-16rem)] h-screen overflow-auto">
+        
+        <!-- Reports Header and Title -->
+        <div class="mb-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Reports</h1>
+        </div>
+
+        <!-- Report List Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+            <% reports.forEach(report => { %>
+                <div class="bg-white shadow-lg p-6 rounded-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center space-x-4">
+                        <!-- Icon -->
+                        <div class="text-blue-500 text-4xl">
+                            <i class="fas fa-file-alt"></i> <!-- FontAwesome Icon for a Report -->
+                        </div>
+                        
+                        <!-- Report Info -->
+                        <div class="flex-grow">
+                            <h2 class="text-xl font-semibold text-gray-800"><%= report.name %></h2>
+                            <p class="text-gray-500">Generate the <%= report.name %> report.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Button -->
+                    <div class="mt-4">
+                        <a href="/reports/<%= report.id %>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            View Report
+                        </a>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+
+    </div>
+
+    <script src="/js/flashMessages.js"></script>
+</body>
+</html>

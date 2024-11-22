@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs', { title: 'Add Payment' }) %>
+<body class="h-screen overflow-hidden bg-gray-100">
+    <!-- Include Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Include Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Flash Messages -->
+    <%- include('../partials/flashMessages.ejs') %>
+
+    <!-- Main Content -->
+    <div class="ml-64 mt-20 p-6 flex flex-col lg:flex-row items-start">
+        <!-- Form (left side) -->
+        <div class="xl:w-3/4 bg-white shadow-md rounded-lg p-8 w-full">
+            <h1 class="text-3xl font-bold mb-6 text-gray-700">Add New Payment</h1>
+
+            <!-- Tab Navigation -->
+            <div class="mb-4">
+                <ul class="flex border-b">
+                    <li class="mr-1">
+                        <a href="#tab-customer" class="tab-link active inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Customer Details</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#tab-sales" class="tab-link inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Sales Details</a>
+                    </li>
+                    <li>
+                        <a href="#tab-payment" class="tab-link inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Payment Details</a>
+                    </li>
+                </ul>
+            </div>
+
+            <form action="/payments/add" method="POST" id="paymentForm">
+                <!-- Tab 1: Customer Details -->
+                <div id="tab-customer" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Employment Number -->
+                        <div>
+                            <label for="employment_number" class="block text-sm font-medium text-gray-700 mb-1">Employment Number</label>
+                            <input type="text" name="employment_number" id="employment_number" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+
+                        <!-- First Name (Read-only) -->
+                        <div>
+                            <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                            <input type="text" name="first_name" id="first_name" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Last Name (Read-only) -->
+                        <div>
+                            <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                            <input type="text" name="last_name" id="last_name" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Sales Details -->
+                <div id="tab-sales" class="tab-content hidden">
+                    <div class="mb-6">
+                        <!-- Select Sale -->
+                        <label for="sale_id" class="block text-sm font-medium text-gray-700 mb-1">Select Sale</label>
+                        <select name="sale_id" id="sale_id" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            
+                        </select>
+                        <input type="hidden" name="agreement_id" id="agreement_id" value="">
+                    </div>
+
+                    <!-- Sale Details Table -->
+                    <div class="mt-4">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Sale Details</h3>
+                        <table class="min-w-full bg-white border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="py-2 px-4 border-b text-left">Product Name</th>
+                                    <th class="py-2 px-4 border-b text-left">Quantity</th>
+                                    <th class="py-2 px-4 border-b text-left">Unit Price</th>
+                                    <th class="py-2 px-4 border-b text-left">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="saleDetailsTable">
+                                <!-- Sale details will be dynamically populated here based on the selected sale -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Payment Details -->
+                <div id="tab-payment" class="tab-content hidden">
+                    <!-- Amount Due (Readonly) -->
+                    <div class="mb-6">
+                        <label for="amount_due" class="block text-sm font-medium text-gray-700 mb-1">Amount Due</label>
+                        <input type="text" name="amount_due" id="amount_due" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                    </div>
+
+                    <!-- Enter Payment Amount -->
+                    <div class="mb-6">
+                        <label for="payment_amount" class="block text-sm font-medium text-gray-700 mb-1">Enter Payment Amount</label>
+                        <input type="number" name="payment_amount" id="payment_amount" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                    </div>
+
+                    <!-- Select Payment Method -->
+                    <div class="mb-6">
+                        <label for="payment_method" class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                        <select name="payment_method" id="payment_method" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            <option value="">Select Payment Method</option>
+                            <% paymentMethods.forEach(function(method) { %>
+                                <option value="<%= method.payment_method_id %>"><%= method.method_name %></option>
+                            <% }); %>
+                        </select>
+                    </div>                    
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end mt-6 space-x-4">
+                    <button type="button" onclick="window.location.href='/payments';" class="px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Add Payment
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Preview Section (right side) -->
+        <div class="xl:w-1/4 w-full bg-white shadow-md rounded-lg p-6 ml-6">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Preview</h2>
+            <div id="preview" class="text-gray-600">
+                <!-- Dynamic preview content will go here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const outstandingPayments = <%- JSON.stringify(outstandingPayments) %>;
+
+            // Tab navigation logic
+            const tabs = document.querySelectorAll('.tab-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // Hide all tab contents initially and set the default tab
+            tabContents.forEach(tc => tc.classList.add('hidden'));
+            document.getElementById('tab-customer').classList.remove('hidden');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.querySelector('.tab-link[href="#tab-customer"]').classList.add('active');
+
+            // Add event listeners to tabs
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.add('hidden'));
+                    tab.classList.add('active');
+                    document.querySelector(tab.getAttribute('href')).classList.remove('hidden');
+                });
+            });
+
+            // Function to update customer details when employment number changes
+        function updateCustomerDetails() {
+            const employmentNumber = document.getElementById('employment_number').value;
+
+            // Find outstanding payments based on employment number
+            const customerPayments = outstandingPayments.filter(payment => payment.employment_number === employmentNumber);
+
+            // Select the customer details fields
+            const firstNameField = document.getElementById('first_name');
+            const lastNameField = document.getElementById('last_name');
+            const saleSelect = document.getElementById('sale_id');
+            saleSelect.innerHTML = ''; // Clear previous options
+
+            if (customerPayments.length > 0) {
+                // Populate customer details
+                const customer = customerPayments[0]; // Assuming all payments have the same customer details
+                firstNameField.value = customer.first_name || '';
+                lastNameField.value = customer.last_name || '';
+
+                // Add the "Select Sale" option
+                const selectOption = document.createElement('option');
+                selectOption.value = ''; // Option value can be empty or set as needed
+                selectOption.textContent = 'Select Sale';
+                saleSelect.appendChild(selectOption);
+
+                // Populate the sale options
+                customerPayments.forEach(payment => {
+                    const option = document.createElement('option');
+                    option.value = payment.sale_id;
+                    option.textContent = `Sale ID: ${payment.sale_id} | Amount Due: ${payment.amount_due}`;
+                    saleSelect.appendChild(option);
+                });
+            } else {
+                // Reset fields if no payments found
+                firstNameField.value = '';
+                lastNameField.value = '';
+                saleSelect.innerHTML = '<option value="">No Outstanding Payments Found</option>';
+            }
+        }
+
+        // Function to update sale details table when a sale is selected
+        function updateSaleDetails() {
+            const saleId = document.getElementById('sale_id').value;
+            
+
+            if (saleId) {
+                // Find the selected sale details from outstandingPayments
+                const selectedPayment = outstandingPayments.find(payment => payment.sale_id == saleId);
+
+                if (selectedPayment) {
+                    const saleDetailsTable = document.getElementById('saleDetailsTable');
+                    const amountDueElement = document.getElementById('amount_due');
+                    saleDetailsTable.innerHTML = ''; // Clear previous table content
+                    
+                    const formattedAmountDue = parseFloat(selectedPayment.amount_due).toFixed(2);
+                    amountDueElement.value = formattedAmountDue;
+
+                    document.getElementById('agreement_id').value = selectedPayment.agreement_id;
+
+                    // Since `selectedPayment` contains the product_name, quantity, and sale_total_amount,
+                    // we manually create the rows for these details.
+
+                    const row = document.createElement('tr');
+
+                    // Product Name Cell
+                    const productNameCell = document.createElement('td');
+                    productNameCell.classList.add('py-2', 'px-4', 'border-b');
+                    productNameCell.textContent = selectedPayment.product_name;
+
+                    // Quantity Cell
+                    const quantityCell = document.createElement('td');
+                    quantityCell.classList.add('py-2', 'px-4', 'border-b');
+                    quantityCell.textContent = selectedPayment.quantity;
+
+                    // Unit Price Cell (if applicable)
+                    const unitPriceCell = document.createElement('td');
+                    unitPriceCell.classList.add('py-2', 'px-4', 'border-b');
+                    const unitPrice = (selectedPayment.sale_total_amount / selectedPayment.quantity).toFixed(2);
+                    unitPriceCell.textContent = unitPrice;
+
+                    // Total Amount Cell
+                    const totalCell = document.createElement('td');
+                    totalCell.classList.add('py-2', 'px-4', 'border-b');
+                    totalCell.textContent = selectedPayment.sale_total_amount;
+
+                    // Append cells to the row
+                    row.appendChild(productNameCell);
+                    row.appendChild(quantityCell);
+                    row.appendChild(unitPriceCell);
+                    row.appendChild(totalCell);
+
+                    // Append the row to the table
+                    saleDetailsTable.appendChild(row);
+                }
+            }else {
+                // Reset the amount due if no sale is selected
+                document.getElementById('amount_due').value = '';
+                document.getElementById('saleDetailsTable').innerHTML = ''; // Clear the table if no sale is selected
+            }
+
+        }
+
+        // Event Listener for Employment Number Input
+        document.getElementById('employment_number').addEventListener('input', updateCustomerDetails);
+
+        // Event Listener for Sale Selection
+        document.getElementById('sale_id').addEventListener('change', updateSaleDetails);
+        });
+    </script>
+</body>
+</html>

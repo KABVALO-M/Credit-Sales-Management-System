@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs', { title: 'Add Sale' }) %>
+<body class="h-screen overflow-hidden bg-gray-100">
+    <!-- Include Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Include Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Flash Messages -->
+    <%- include('../partials/flashMessages.ejs') %>
+
+    <!-- Main Content -->
+    <div class="ml-64 mt-20 p-6 flex flex-col lg:flex-row items-start">
+        <!-- Form (left side) -->
+        <div class="xl:w-3/4 bg-white shadow-md rounded-lg p-8 w-full">
+            <h1 class="text-3xl font-bold mb-6 text-gray-700">Add New Sale</h1>
+
+            <!-- Tab Navigation -->
+            <div class="mb-4">
+                <ul class="flex border-b">
+                    <li class="mr-1">
+                        <a href="#tab-customer" class="tab-link active inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Customer Details</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#tab-credit-agreement" class="tab-link inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Credit Agreement</a>
+                    </li>
+                    <li>
+                        <a href="#tab-sale-details" class="tab-link inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Sale Details</a>
+                    </li>
+                </ul>
+            </div>
+
+            <form action="/sales/add" method="POST" id="saleForm">
+                <!-- Tab 1: Customer Details -->
+                <div id="tab-customer" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Employment Number -->
+                        <div>
+                            <label for="employment_number" class="block text-sm font-medium text-gray-700 mb-1">Employment Number</label>
+                            <input type="text" name="employment_number" id="employment_number" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+
+                        <!-- First Name (Read-only) -->
+                        <div>
+                            <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                            <input type="text" name="first_name" id="first_name" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Last Name (Read-only) -->
+                        <div>
+                            <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                            <input type="text" name="last_name" id="last_name" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <!-- Tab 2: Credit Agreement -->
+                <div id="tab-credit-agreement" class="tab-content">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-4">Credit Agreement</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <input type="hidden" name="agreement_id" id="agreement_id" value="">
+                        <!-- Credit Agreement Selection -->
+                        <div>
+                            <label for="credit_agreement" class="block text-sm font-medium text-gray-700 mb-1">Credit Agreement</label>
+                            <select id="credit_agreement_select" name="credit_agreement" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </select>
+                        </div>
+
+                        <!-- Agreement Total (Read-only) -->
+                        <div>
+                            <label for="agreement_total" class="block text-sm font-medium text-gray-700 mb-1">Agreement Total</label>
+                            <input id="agreement_total" name="agreement_total" type="text" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Monthly Installments (Read-only) -->
+                        <div>
+                            <label for="monthly_installments" class="block text-sm font-medium text-gray-700 mb-1">Monthly Installments</label>
+                            <input id="monthly_installments" name="monthly_installments" type="text" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                        </div>
+
+                        <!-- Total Months to Pay (Read-only) -->
+                        <div>
+                            <label for="total_months" class="block text-sm font-medium text-gray-700 mb-1">Total Months to Pay</label>
+                            <input id="total_months" name="total_months" type="text" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Tab 3: Sale Details -->
+                <div id="tab-sale-details" class="tab-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Product Name -->
+                        <div>
+                            <label for="product_name" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                            <input type="text" name="product_name" id="product_name" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly required>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div>
+                            <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                            <input type="number" name="quantity" id="quantity" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Unit Price -->
+                        <div>
+                            <label for="unit_price" class="block text-sm font-medium text-gray-700 mb-1">Unit Price</label>
+                            <input type="text" name="unit_price" id="unit_price" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly required>
+                        </div>
+
+                        <!-- Total Price (Read-only) -->
+                        <div>
+                            <label for="total_price" class="block text-sm font-medium text-gray-700 mb-1">Total Price</label>
+                            <input type="text" name="total_price" id="total_price" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end mt-6 space-x-4">
+                    <button type="button" onclick="window.location.href='/sales';" class="px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Add Sale
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Preview Section (right side) -->
+        <div class="xl:w-1/4 w-full bg-white shadow-md rounded-lg p-6 ml-6">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Preview</h2>
+            <div id="preview" class="text-gray-600">
+                <!-- Dynamic preview content will go here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch agreementsWithoutSales from server-side and convert it to JS object
+            const agreementsWithoutSales = <%- JSON.stringify(agreementsWithoutSales) %>;
+    
+            // Tab navigation logic
+            const tabs = document.querySelectorAll('.tab-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+    
+            // Hide all tab contents initially and set the default tab
+            tabContents.forEach(tc => tc.classList.add('hidden')); // Hide all tabs
+            document.getElementById('tab-customer').classList.remove('hidden'); // Show the customer tab
+            tabs.forEach(tab => tab.classList.remove('active')); // Remove active class from all tabs
+            document.querySelector('.tab-link[href="#tab-customer"]').classList.add('active'); // Set customer tab as active
+    
+            // Add event listeners to tabs
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default anchor link behavior
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.add('hidden'));
+                    tab.classList.add('active');
+                    document.querySelector(tab.getAttribute('href')).classList.remove('hidden');
+                });
+            });
+    
+            // Function to update customer details when employment number changes
+            function updateCustomerDetails() {
+                const employmentNumber = document.getElementById('employment_number').value;
+    
+                // Find the agreements based on employment number
+                const customerAgreements = agreementsWithoutSales.filter(agreement => agreement.employment_number === employmentNumber);
+    
+                // Select the credit agreement dropdown
+                const creditAgreementSelect = document.getElementById('credit_agreement_select');
+                creditAgreementSelect.innerHTML = ''; // Clear previous options
+    
+                if (customerAgreements.length > 0) {
+                    // Populate customer details (assuming they are the same for all agreements under this employment number)
+                    const customer = customerAgreements[0]; // Since all agreements will have the same customer details
+                    document.getElementById('first_name').value = customer.first_name || '';
+                    document.getElementById('last_name').value = customer.last_name || '';
+
+                    // Add the "Select Agreement" option
+                    const selectOption = document.createElement('option');
+                    selectOption.value = ''; // Option value can be empty or set as needed
+                    selectOption.textContent = 'Select Agreement';
+                    creditAgreementSelect.appendChild(selectOption);
+
+                    // Populate the credit agreement options
+                    customerAgreements.forEach(agreement => {
+                        const option = document.createElement('option');
+                        option.value = agreement.agreement_id;
+                        option.textContent = `${agreement.product_name} - ${agreement.agreement_status}`; // Customize this as needed
+                        creditAgreementSelect.appendChild(option);
+                    });
+                } else {
+                    // Clear all fields if no match found
+                    document.getElementById('first_name').value = '';
+                    document.getElementById('last_name').value = '';
+                    creditAgreementSelect.innerHTML = '<option value="">No Agreements Available</option>';
+                }
+            }
+    
+            // Function to update agreement details when an agreement is selected
+            function updateAgreementDetails() {
+                const creditAgreementSelect = document.getElementById('credit_agreement_select');
+                const selectedAgreementId = creditAgreementSelect.value;
+    
+                // Find the selected agreement details
+                const selectedAgreement = agreementsWithoutSales.find(agreement => agreement.agreement_id == selectedAgreementId);
+    
+                // Populate the agreement fields or clear them if no agreement is selected
+                if (selectedAgreement) {
+                    document.getElementById('agreement_id').value = selectedAgreement.agreement_id;
+                    document.getElementById('agreement_total').value = selectedAgreement.agreement_total_amount || '';
+                    document.getElementById('monthly_installments').value = selectedAgreement.monthly_installment || '';
+                    document.getElementById('total_months').value = selectedAgreement.months_to_pay || '';
+
+                    // Updating Sales Tab
+                    document.getElementById('product_name').value = selectedAgreement.product_name || '';
+                    document.getElementById('quantity').value = selectedAgreement.quantity || '';
+                    document.getElementById('unit_price').value = selectedAgreement.product_price || '';
+                    document.getElementById('total_price').value = selectedAgreement.agreement_total_amount || '';
+                } else {
+                    document.getElementById('agreement_total').value = '';
+                    document.getElementById('monthly_installments').value = '';
+                    document.getElementById('total_months').value = '';
+                }
+            }
+    
+            // Event listener for employment number input field
+            document.getElementById('employment_number').addEventListener('input', updateCustomerDetails);
+    
+            // Event listener for credit agreement dropdown change
+            document.getElementById('credit_agreement_select').addEventListener('change', updateAgreementDetails);
+        });
+    </script>
+    
+    
+    
+</body>
+</html>

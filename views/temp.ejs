@@ -1,0 +1,20 @@
+ <!-- Stock Card -->
+ <div class="bg-white shadow-lg p-4 border-l-4 border-yellow-500">
+    <div class="flex justify-between items-start">
+        <div class="text-left">
+            <p class="text-gray-500 text-sm">Stock</p>
+            <p class="text-black text-3xl font-bold"><%= stock %></p>
+        </div>
+        <div class="text-yellow-500">
+            <!-- Icon representing stock -->
+            <i class="fas fa-cube text-3xl"></i>
+        </div>
+    </div>
+    <div class="mt-4">
+        <% if (stockGrowth >= 0) { %>
+            <p class="text-green-500 text-sm">+<%= stockGrowth %>% from last week</p>
+        <% } else { %>
+            <p class="text-red-500 text-sm"><%= stockGrowth %>% from last week</p>
+        <% } %>
+    </div>
+</div>

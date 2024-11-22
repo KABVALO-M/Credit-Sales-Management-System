@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs', { title: 'Add Customer' }) %>
+<body class="h-screen overflow-hidden bg-gray-100">
+    <!-- Include Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Include Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Flash Messages -->
+    <%- include('../partials/flashMessages.ejs') %>
+
+     <!-- Main Content -->
+     <div class="ml-64 mt-20 p-6 flex flex-col lg:flex-row items-start">
+        <!-- Form (left side) -->
+        <div class="xl:w-3/4 bg-white shadow-md rounded-lg p-8 w-full">
+            <h1 class="text-3xl font-bold mb-6 text-gray-700">Add New Customer</h1>
+            
+            <!-- Tab Navigation -->
+            <div class="mb-4">
+                <ul class="flex border-b">
+                    <li class="mr-1">
+                        <a href="#tab-personal" class="tab-link active inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Personal Information</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#tab-contact" class="tab-link inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Contact Information</a>
+                    </li>
+                    <li>
+                        <a href="#tab-work" class="tab-link inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Work Information</a>
+                    </li>
+                </ul>
+            </div>
+
+            <form action="/customers/add" method="POST" id="customerForm">
+                <!-- Tab 1: Personal Information -->
+                <div id="tab-personal" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="employment_number" class="block text-sm font-medium text-gray-700 mb-2">Employment Number</label>
+                            <input type="text" name="employment_number" id="employment_number" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label for="first_name" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                            <input type="text" name="first_name" id="first_name" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="last_name" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                            <input type="text" name="last_name" id="last_name" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                            <input type="date" name="date_of_birth" id="date_of_birth" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Contact Information -->
+                <div id="tab-contact" class="tab-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                            <input type="text" name="phone_number" id="phone_number" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" name="email" id="email" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="work_address" class="block text-sm font-medium text-gray-700 mb-2">Work Address</label>
+                            <input type="text" name="work_address" id="work_address" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="residential_address" class="block text-sm font-medium text-gray-700 mb-2">Residential Address</label>
+                            <input type="text" name="residential_address" id="residential_address" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Work Information -->
+                <div id="tab-work" class="tab-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="department" class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                            <input type="text" name="department" id="department" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label for="employment_position" class="block text-sm font-medium text-gray-700 mb-2">Position</label>
+                            <input type="text" name="employment_position" id="employment_position" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="city" class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                            <input type="text" name="city" id="city" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="state" class="block text-sm font-medium text-gray-700 mb-2">State</label>
+                            <input type="text" name="state" id="state" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons (Submit and Cancel) -->
+                <div class="flex justify-end mt-4">
+                    <!-- Cancel Button -->
+                    <button type="button" onclick="window.location.href='/customers';" class="inline-flex items-center px-6 py-3 mr-4 border border-gray-300 text-base font-medium rounded-lg shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">
+                        Cancel
+                    </button>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Add Customer
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Side: Recently Added Customers (Visible on Large Screens) -->
+        <div class="hidden xl:block  bg-white shadow-md rounded-lg p-8 ml-8">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Recently Added Customers</h2>
+            <ul>
+                <% if (recentCustomers && recentCustomers.length > 0) { %>
+                    <% recentCustomers.forEach(function(customer) { %>
+                        <li class="p-4 mb-4 bg-gray-100 rounded-lg shadow">
+                            <p class="font-medium text-lg"><%= customer.first_name %> <%= customer.last_name %></p>
+                        </li>
+                    <% }) %>
+                <% } else { %>
+                    <p>No customers have been added yet.</p>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/js/flashMessages.js"></script>
+    <script src="/js/addCustomer.js"></script>
+
+</body>
+</html>

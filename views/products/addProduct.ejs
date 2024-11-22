@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs', { title: 'Add Product' }) %>
+<body class="h-screen overflow-hidden bg-gray-100">
+    <!-- Include Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Include Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Flash Messages -->
+    <%- include('../partials/flashMessages.ejs') %>
+
+    <!-- Main Content -->
+    <div class="ml-64 mt-20 p-6 w-[calc(100%-16rem)] h-[calc(100vh-5rem)] overflow-y-auto flex gap-6 justify-start">
+        <!-- Add Product Form -->
+        <div class="w-3/4 max-w-2xl">
+            <h1 class="text-2xl font-bold mb-5">Add Product</h1>
+            <form action="/products/add" method="POST" class="bg-white p-6 shadow-lg rounded">
+                <div class="mb-4">
+                    <label for="product_name" class="block text-gray-700 text-sm font-bold mb-2">Product Name</label>
+                    <input type="text" id="product_name" name="product_name" class="w-full p-2 border border-gray-300 rounded" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="product_description" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                    <textarea id="product_description" name="product_description" rows="4" class="w-full p-2 border border-gray-300 rounded" required></textarea>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Price</label>
+                    <input type="number" id="price" name="price" step="0.01" class="w-full p-2 border border-gray-300 rounded" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="category" class="block text-gray-700 text-sm font-bold mb-2">Category</label>
+                    <select id="category" name="category_id" class="w-full p-2 border border-gray-300 rounded" required>
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category.category_id %>"><%= category.category_name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        Add Product
+                    </button>
+                    <a href="/products" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Recently Added Products Section -->
+        <div class="w-1/4 bg-white p-4 shadow-lg rounded">
+            <h2 class="text-xl font-bold mb-4">Recently Added Products</h2>
+            <ul class="space-y-4">
+                <li class="flex justify-between items-center border-b border-gray-300 pb-2">
+                    <span class="text-gray-700 font-bold">Product Name %></span>
+                    <span class="text-gray-700 font-bold">Product Price</span>
+                </li>
+                <% recentProducts.forEach(product => { %>
+                    <li class="flex justify-between items-center pb-2">
+                        <span class="text-gray-700 font-semibold"><%= product.product_name %></span>
+                        <span class="text-gray-500 text-sm">MKW <%= product.price %></span>
+                    </li>
+                <% }); %>
+                <!-- Placeholder for no products -->
+                <% if (recentProducts.length === 0) { %>
+                    <li class="text-gray-500">No recent products</li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/js/flashMessages.js"></script>
+</body>
+</html>

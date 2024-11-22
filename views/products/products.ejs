@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs', { title: 'Customers' }) %>
+<body class="h-screen overflow-hidden bg-gray-100">
+    <!-- Include Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Include Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Flash Messages -->
+    <%- include('../partials/flashMessages.ejs') %>
+
+    <!-- Main Content -->
+    <div class="ml-64 mt-20 p-6 w-[calc(100%-16rem)] h-screen overflow-auto">
+        <h1 class="text-2xl font-bold mb-5">Products and Categories</h1>
+        <!-- Responsive Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Products Section (Takes 2 columns on large screens) -->
+            <div class="lg:col-span-2 bg-white p-4 shadow-lg">
+                <!-- Add Product Button -->
+                <div class="mb-4 flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Products</h2>
+                    <a href="/products/add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        + Add Product
+                    </a>
+                </div>
+
+                <!-- Products Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr>
+                                <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Product Name</th>
+                                <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Description</th>
+                                <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Price (MWK)</th>
+                                <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Category</th>
+                                <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% products.forEach(product => { %>
+                                <tr>
+                                    <td class="py-4 px-4 border-b border-gray-300"><%= product.product_name %></td>
+                                    <td class="py-4 px-4 border-b border-gray-300"><%= product.product_description %></td>
+                                    <td class="py-4 px-4 border-b border-gray-300"><%= formatCurrency(product.price) %></td>
+                                    <td class="py-4 px-4 border-b border-gray-300"><%= product.category_name %></td>
+                                    <td class="py-4 px-4 border-b border-gray-300">
+                                        <div class="flex space-x-2">
+                                            <a href="/products/edit/<%= product.product_id %>" class="text-blue-500 hover:text-blue-700">
+                                                <i class="fas fa-edit"></i> <!-- FontAwesome Edit Icon -->
+                                            </a>
+                                            <form action="/products/delete/<%= product.product_id %>" method="POST" class="inline">
+                                                <button type="submit" class="text-red-500 hover:text-red-700" onclick="return confirm('Are you sure you want to delete this product?')">
+                                                    <i class="fas fa-trash"></i> <!-- FontAwesome Delete Icon -->
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Categories Section (Takes 1 column on large screens) -->
+            <div class="bg-white p-4 shadow-lg">
+                <!-- Add Category Form -->
+                <h2 class="text-xl font-bold mb-4">Add Category</h2>
+                <form action="/categories/add" method="POST" class="mb-4">
+                    <div class="mb-4">
+                        <label for="category_name" class="block text-gray-700 text-sm font-bold mb-2">Category Name</label>
+                        <input type="text" id="category_name" name="category_name" class="w-full p-2 border border-gray-300 rounded" required>
+                    </div>
+                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        Add Category
+                    </button>
+                    <hr class="border-2 border-gray-300 mt-2">
+                </form>
+
+                <!-- Categories Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr>
+                                <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Category Name</th>
+                                <th class="py-4 px-4 border-b-2 border-gray-300 text-left text-gray-600 text-sm">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% categories.forEach(category => { %>
+                                <tr>
+                                    <td class="py-4 px-4 border-b border-gray-300"><%= category.category_name %></td>
+                                    <td class="py-4 px-4 border-b border-gray-300">
+                                        <div class="flex space-x-2">
+                                            <a href="/categories/edit/<%= category.category_id %>" class="text-blue-500 hover:text-blue-700">
+                                                <i class="fas fa-edit"></i> <!-- FontAwesome Edit Icon -->
+                                            </a>
+                                            <form action="/categories/delete/<%= category.category_id %>" method="POST" class="inline">
+                                                <button type="submit" class="text-red-500 hover:text-red-700" onclick="return confirm('Are you sure you want to delete this category?')">
+                                                    <i class="fas fa-trash"></i> <!-- FontAwesome Delete Icon -->
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/js/flashMessages.js"></script>
+</body>
+</html>

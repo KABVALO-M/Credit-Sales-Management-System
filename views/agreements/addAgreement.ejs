@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs', { title: 'Add Agreement' }) %>
+<body class="h-screen overflow-hidden bg-gray-100">
+    <!-- Include Sidebar -->
+    <%- include('../partials/sidebar.ejs') %>
+
+    <!-- Include Header -->
+    <%- include('../partials/header.ejs') %>
+
+    <!-- Flash Messages -->
+    <%- include('../partials/flashMessages.ejs') %>
+
+    <!-- Main Content -->
+    <div class="ml-64 mt-20 p-6 flex flex-col lg:flex-row items-start">
+        <!-- Form (left side) -->
+        <div class="xl:w-3/4 bg-white shadow-md rounded-lg p-8 w-full">
+            <h1 class="text-3xl font-bold mb-6 text-gray-700">Add New Agreement</h1>
+
+            <!-- Tab Navigation -->
+            <div class="mb-4">
+                <ul class="flex border-b">
+                    <li class="mr-1">
+                        <a href="#tab-customer" class="tab-link active inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Customer Details</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#tab-product" class="tab-link inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Product Details</a>
+                    </li>
+                    <li>
+                        <a href="#tab-payment" class="tab-link inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700">Payment Details</a>
+                    </li>
+                </ul>
+            </div>
+
+            <form action="/agreements/add" method="POST" id="agreementForm">
+                <!-- Hidden input for customer ID -->
+                <input type="hidden" name="customer_id" id="hidden_customer_id">
+                <!-- Tab 1: Customer Details -->
+                <div id="tab-customer" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Employment Number -->
+                        <div>
+                            <label for="employment_number" class="block text-sm font-medium text-gray-700 mb-1">Employment Number</label>
+                            <input type="text" name="employment_number" id="employment_number" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+
+                        <!-- Customer Name (read-only) -->
+                        <div>
+                            <label for="customer_name" class="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
+                            <input type="text" name="customer_name" id="customer_name" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-100" readonly required>
+                        </div>
+
+                        <!-- Customer Email (read-only) -->
+                        <div>
+                            <label for="customer_email" class="block text-sm font-medium text-gray-700 mb-1">Customer Email</label>
+                            <input type="email" name="customer_email" id="customer_email" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-100" readonly required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Product Details -->
+                <div id="tab-product" class="tab-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Product selection with price per unit -->
+                        <div>
+                            <label for="product" class="block text-sm font-medium text-gray-700 mb-1">Select Product</label>
+                            <select name="product" id="product" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <option value="" disabled selected>Select a product</option>
+                                <% products.forEach(product => { %>
+                                    <option value="<%= product.product_id %>" data-price="<%= product.price %>">
+                                        <%= product.product_name %> - <%= product.category_name %> - $<%= parseFloat(product.price).toFixed(2) %>
+                                    </option>
+                                <% }) %>
+                            </select>
+                        </div>
+                
+                        <!-- Product price per unit -->
+                        <div>
+                            <label for="price-per-unit" class="block text-sm font-medium text-gray-700 mb-1">Price / Unit</label>
+                            <input type="text" name="price-per-unit" id="price-per-unit" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-100" readonly>
+                        </div>
+                    </div>
+                
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Quantity -->
+                        <div>
+                            <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                            <input type="number" name="quantity" id="quantity" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required min="1" value="1">
+                        </div>
+                
+                        <!-- Total price -->
+                        <div>
+                            <label for="total" class="block text-sm font-medium text-gray-700 mb-1">Total</label>
+                            <input type="text" name="total" id="total" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-100" readonly>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <!-- Tab 3: Payment Details -->
+                <div id="tab-payment" class="tab-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                            <input type="date" name="start_date" id="start_date" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+
+                        <div>
+                            <label for="months" class="block text-sm font-medium text-gray-700 mb-1">Number of Months</label>
+                            <input type="number" name="months" id="months" class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end mt-6 space-x-4">
+                    <button type="button" onclick="window.location.href='/agreements';" class="px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Add Agreement
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Side: Recently Added Agreements (Visible on Large Screens) -->
+        <div class="hidden xl:block bg-white shadow-md rounded-lg p-8 ml-8">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Recently Added Agreements</h2>
+            <ul>
+                <% if (recentAgreements && recentAgreements.length > 0) { %>
+                    <% recentAgreements.forEach(function(agreement) { %>
+                        <li class="p-4 mb-4 bg-gray-100 rounded-lg shadow">
+                            <p class="font-medium text-lg"><%= agreement.customer_name %> - <%= agreement.product_name %></p>
+                        </li>
+                    <% }) %>
+                <% } else { %>
+                    <p>No agreements have been added yet.</p>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/flashMessages.js"></script>
+    <script src="/js/addAgreement.js"></script>
+    <script>
+        // JavaScript for handling tab switching
+        document.querySelectorAll('.tab-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetTab = this.getAttribute('href');
+    
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.add('hidden');
+                });
+    
+                // Remove active class from all links
+                document.querySelectorAll('.tab-link').forEach(link => {
+                    link.classList.remove('active', 'text-blue-700');
+                });
+    
+                // Show the selected tab
+                document.querySelector(targetTab).classList.remove('hidden');
+    
+                // Add active class to the clicked tab
+                this.classList.add('active', 'text-blue-700');
+            });
+        });
+    
+        // Default active tab on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const defaultTab = '#tab-customer';
+            document.querySelector(defaultTab).classList.remove('hidden');
+            document.querySelector(`.tab-link[href="${defaultTab}"]`).classList.add('active', 'text-blue-700');
+        });
+    
+        // Calculate total based on product selection and quantity
+        const productSelect = document.getElementById('product');
+        const pricePerUnitInput = document.getElementById('price-per-unit');
+        const quantityInput = document.getElementById('quantity');
+        const totalInput = document.getElementById('total');
+    
+        productSelect.addEventListener('change', calculateTotal);
+        quantityInput.addEventListener('input', calculateTotal);
+    
+        function calculateTotal() {
+            const selectedProduct = productSelect.options[productSelect.selectedIndex];
+            const quantity = parseInt(quantityInput.value, 10) || 0;
+            const productPrice = parseFloat(selectedProduct.getAttribute('data-price')) || 0;
+    
+            // Update the price per unit input field
+            pricePerUnitInput.value = productPrice.toFixed(2);
+    
+            // Calculate and update total price
+            totalInput.value = (productPrice * quantity).toFixed(2);
+        }
+    
+        // Fetch customer details based on employment number
+        const employmentNumberInput = document.getElementById('employment_number');
+        const customerNameInput = document.getElementById('customer_name');
+        const customerEmailInput = document.getElementById('customer_email');
+        const customerIDInput = document.getElementById('hidden_customer_id');
+    
+        employmentNumberInput.addEventListener('input', function() {
+            const employmentNumber = this.value.trim();
+    
+            if (employmentNumber.length > 0) {
+                fetch(`/customers/details/${employmentNumber}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            customerIDInput.value = data.customer.id || ''
+                            customerNameInput.value = data.customer.name || '';
+                            customerEmailInput.value = data.customer.email || '';
+                        } else {
+                            customerNameInput.value = '';
+                            customerEmailInput.value = '';
+                        }
+                    })
+                    .catch(error => console.error('Error fetching customer details:', error));
+            } else {
+                customerNameInput.value = '';
+                customerEmailInput.value = '';
+            }
+        });
+    </script>
+    
+</body>
+</html>
